@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>sales-bot</title>
+  <meta name="description" content="Tool to manage time based sales">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://unpkg.com/@feathersjs/client@latest/dist/feathers.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/papaparse.min.js" type="text/javascript"></script>
+  <script src="js/lib/zip.js" type="text/javascript"></script>
+
+</head>
+
+<body data-theme="synthwave">
+  <div class="container mx-auto">
+    <div class="mx-auto py-5 w-4/5">
+      <div class="flex flex-wrap">
+        <label class=" form-control w-full max-w-xs mb-5 mr-5">
+          <div class="label">
+            <span class="label-text">Upload Analytics File</span>
+          </div>
+          <input type="file" data-type="analytics" id="import-csv"
+            class="file-input file-input-bordered w-full max-w-xs" />
+        </label>
+        <label class=" form-control w-full max-w-xs pb-5">
+          <div class="label">
+            <span class="label-text">Upload eCom File</span>
+          </div>
+          <input type="file" data-type="ecom" id="import-csv" class="file-input file-input-bordered w-full max-w-xs" />
+        </label>
+        <label class=" form-control w-full max-w-xs pb-5">
+          <div class="label">
+            <span class="label-text">Upload Full Analytics (w/ Archived)</span>
+          </div>
+          <input type="file" data-type="archive" id="import-csv"
+            class="file-input file-input-bordered w-full max-w-xs" />
+          <div class="label">
+            <span class="label-text">Use this to remove 0 qty items</span>
+          </div>
+        </label>
+
+        <button id="update-prices" class="btn m-1">Update Prices</button>
+      </div>
+      <span class="divider"></span>
+
+
+      <div class="pb-1 flex flex-wrap items-end ">
+        <label class="form-control w-full max-w-xs m-1">
+          <div class="label">
+            <span class="label-text">Select Sale Tier</span>
+          </div>
+          <select id="tier-select" class="select select-bordered">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">CLEARANCE</option>
+            <option value="-1">Undetermined</option>
+          </select>
+        </label>
+      
+
+        <button class="btn  m-1 " id="sale-download">Download Sale CSV</button>
+        <button class="btn  m-1 " id="tier-download">Download Tier Lists</button>
+
+        <button class="btn  m-1 " id="ecom-download">eCom Sale CSV</button>
+        <button class="btn  m-1 " id="new-clearance-download">New Clearance Items CSV</button>
+
+        <!-- <button class="btn btn-sm join-item" id="tier-2-download">Tier 2 Download</button>
+        <button class="btn btn-sm join-item" id="tier-3-download">Tier 3 Download</button>
+
+        <button class="btn btn-sm join-item" id="tier-4-download">Tier 4 Download</button>
+        <button class="btn btn-sm join-item" id="tier-5-download">CLEARANCE Items Download</button>
+        <button class="btn btn-sm join-item" id="unable-to-determine">Needs a Human to Decide</button> -->
+
+
+        <button class="btn m-1" id="create-labels">Print Labels</button>
+        <button class="btn m-1" id="remove-labels">Download Label Removal File</button>
+      </div>
+
+
+
+
+    </div>
+
+
+    <span class="divider"></span>
+    <div id="app">
+
+    </div>
+  </div>
+
+  <script src="js/client.js" type="module"></script>
+
+</body>
+
+</html>
