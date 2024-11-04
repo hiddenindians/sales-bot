@@ -1,6 +1,8 @@
-import client from './client'
-import { downloadBlob } from './utils'
-import { getDiscountPercentage } from './utils'
+import client from './client.js'
+import { downloadBlob } from './utils.js'
+import { getDiscountPercentage } from './utils.js'
+
+
 
 export const updateProductCheckbox = (field) => async (e) => {
   const enabled = e.target.checked

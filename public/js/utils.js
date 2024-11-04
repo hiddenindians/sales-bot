@@ -1,4 +1,4 @@
-import { patchProduct } from "./productService"
+import { patchProduct } from "./productService.js"
 
 export const addWeeksToDate = (dateObj, numberOfWeeks) => {
   dateObj.setDate(dateObj.getDate() + numberOfWeeks * 7)
