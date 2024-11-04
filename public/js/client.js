@@ -374,40 +374,40 @@ const processAnalyticsCSV = async (results) => {
 //     ...additionalFields
 //   })
 // }
-const patchProduct = async (id, product, saleTierFromCSV, calculateSalePrice, additionalFields = {}) => {
-  const productName = 'Item Description'
-  const cost = 'Item Avg Cost'
-  const price = 'Item Metrics Price'
-  const quantity = 'Item Metrics Quantity on Hand'
-  const category = 'Item Category'
-  var salePrice
+// const patchProduct = async (id, product, saleTierFromCSV, calculateSalePrice, additionalFields = {}) => {
+//   const productName = 'Item Description'
+//   const cost = 'Item Avg Cost'
+//   const price = 'Item Metrics Price'
+//   const quantity = 'Item Metrics Quantity on Hand'
+//   const category = 'Item Category'
+//   var salePrice
 
-  const discountPercentage = await getDiscountPercentage(
-    saleTierFromCSV,
-    (product[price] - product[cost]) / product[price]
-  )
+//   const discountPercentage = await getDiscountPercentage(
+//     saleTierFromCSV,
+//     (product[price] - product[cost]) / product[price]
+//   )
 
-  if (calculateSalePrice) {
-    salePrice = discountPercentage == 1 ? Number(product[price]) : Number(product[cost] / discountPercentage)
-  } else {
-    salePrice = Number(product[price])
-  }
+//   if (calculateSalePrice) {
+//     salePrice = discountPercentage == 1 ? Number(product[price]) : Number(product[cost] / discountPercentage)
+//   } else {
+//     salePrice = Number(product[price])
+//   }
   
-  const patchFields = {
-    name: product[productName],
-    category: product[category],
-    regular_price: Number(product[price]),
-    sale_price: salePrice,
-    quantity: Number(product[quantity]),
-    desired_margin: Number((1 - discountPercentage).toFixed(2)),
-    ...additionalFields
-  }
+//   const patchFields = {
+//     name: product[productName],
+//     category: product[category],
+//     regular_price: Number(product[price]),
+//     sale_price: salePrice,
+//     quantity: Number(product[quantity]),
+//     desired_margin: Number((1 - discountPercentage).toFixed(2)),
+//     ...additionalFields
+//   }
 
-  // console.log('Patching product:', id)
-  // console.log('Patch fields:', patchFields)
+//   // console.log('Patching product:', id)
+//   // console.log('Patch fields:', patchFields)
 
-  await client.service('products').patch(id, patchFields)
-}
+//   await client.service('products').patch(id, patchFields)
+// }
 
 // const handleProductUpdate = async (productFromDB, product, saleTierFromCSV) => {
 //   const saleTierFromDB = Number(productFromDB.current_sale_tier)
@@ -457,29 +457,59 @@ const patchProduct = async (id, product, saleTierFromCSV, calculateSalePrice, ad
 //       }
 //   }
 // }
-const handleProductUpdate = async (productFromDB, product, saleTierFromCSV) => {
-  const saleTierFromDB = Number(productFromDB.current_sale_tier)
+// const handleProductUpdate = async (productFromDB, product, saleTierFromCSV) => {
 
 
-  const additionalFields = {
-    remove_label: false,
-    create_label: false,
-    current_sale_tier: saleTierFromCSV,
-    last_sale_tier: saleTierFromDB
-  }
+//   const productName = 'Item Description'
+//   const cost = 'Item Avg Cost'
+//   const price = 'Item Metrics Price'
+//   const quantity = 'Item Metrics Quantity on Hand'
+//   const category = 'Item Category'
+//   var salePrice
+//   const saleTierFromDB = Number(productFromDB.current_sale_tier)
 
-  if (saleTierFromCSV == -1) {
-    additionalFields.current_sale_tier = -1
-  } else if (saleTierFromCSV == 0 && saleTierFromDB != 0) {
-    additionalFields.remove_label = true
-  } else if (Number(saleTierFromDB) != Number(saleTierFromCSV)) {
-    additionalFields.create_label = true
-  } 
 
- // console.log('Additional fields:', additionalFields)
+//   const additionalFields = {
+//     remove_label: false,
+//     create_label: false,
+//     current_sale_tier: saleTierFromCSV,
+//     last_sale_tier: saleTierFromDB
+//   }
 
-  await patchProduct(productFromDB.id, product, saleTierFromCSV, saleTierFromCSV > 0, additionalFields)
-}
+//   if (saleTierFromCSV == -1) {
+//     additionalFields.current_sale_tier = -1
+//   } else if (saleTierFromCSV == 0 && saleTierFromDB != 0) {
+//     additionalFields.remove_label = true
+//   } else if (Number(saleTierFromDB) != Number(saleTierFromCSV)) {
+//     additionalFields.create_label = true
+//   } 
+
+//   const discountPercentage = await getDiscountPercentage(
+//     saleTierFromCSV,
+//     (product[price] - product[cost]) / product[price]
+//   )
+
+//   if (calculateSalePrice) {
+//     salePrice = discountPercentage == 1 ? Number(product[price]) : Number(product[cost] / discountPercentage)
+//   } else {
+//     salePrice = Number(product[price])
+//   }
+
+//   const patchFields = {
+//     name: product[productName],
+//     category: product[category],
+//     regular_price: Number(product[price]),
+//     sale_price: salePrice,
+//     quantity: Number(product[quantity]),
+//     desired_margin: Number((1 - discountPercentage).toFixed(2)),
+//     ...additionalFields
+//   }
+
+//  // console.log('Additional fields:', additionalFields)
+
+
+//   await patchProduct(productFromDB.id, patchFields)
+// }
 
 const processArchiveCSV = async (results) => {
   const batchSize = 100
@@ -504,66 +534,66 @@ const processArchiveCSV = async (results) => {
   alert('finished processing')
 }
 
-const determineSaleTier = async (product) => {
-  const daysSinceSold = Number(product['Item Metrics Days Since Sold'])
-  const daysSinceReceived = Number(product['Item Metrics Days Since Received'])
-  const productName = product['Item Description']
-  const quantity = Number(product['Item Metrics Quantity on Hand'])
+// const determineSaleTier = async (product) => {
+//   const daysSinceSold = Number(product['Item Metrics Days Since Sold'])
+//   const daysSinceReceived = Number(product['Item Metrics Days Since Received'])
+//   const productName = product['Item Description']
+//   const quantity = Number(product['Item Metrics Quantity on Hand'])
 
-  if (quantity <= 0) {
-    return 0
-  }
+//   if (quantity <= 0) {
+//     return 0
+//   }
 
-  if (
-    (daysSinceSold == 0 && daysSinceReceived == 0) ||
-    product['Item Category'].includes('Single Cards') ||
-    product['Item Avg Cost'] == 0
-  ) {
-    return -1 //must be determined manually
-  }
+//   if (
+//     (daysSinceSold == 0 && daysSinceReceived == 0) ||
+//     product['Item Category'].includes('Single Cards') ||
+//     product['Item Avg Cost'] == 0
+//   ) {
+//     return -1 //must be determined manually
+//   }
 
-  // if (productName.includes('CLEARANCE')) {
-  //   return 5
-  // }
+//   // if (productName.includes('CLEARANCE')) {
+//   //   return 5
+//   // }
 
 
 
-  if (daysSinceSold == 0 || (daysSinceSold - daysSinceReceived) > 60) { //since sold - sincerec > 60 is old item restocked after long time. treat as new item
-    console.log(product['Item System ID'])
-    //Zero means never sold. doesn't mean sold today
-    if (daysSinceReceived < 60) {
-      return 0
-    } else if (daysSinceReceived >= 60 && daysSinceReceived <= 90) {
-      return 1
-    } else if (daysSinceReceived >= 91 && daysSinceReceived <= 120) {
-      return 2
-    } else if (daysSinceReceived >= 121 && daysSinceReceived <= 150) {
-      return 3
-    } else if (daysSinceReceived >= 151 && daysSinceReceived <= 180) {
-      return 4
-    } else if (daysSinceReceived >= 181 && productName.includes('CLEARANCE')) {
-      return 5
-    }
-  }
+//   if (daysSinceSold == 0 || (daysSinceSold - daysSinceReceived) > 60) { //since sold - sincerec > 60 is old item restocked after long time. treat as new item
+//     console.log(product['Item System ID'])
+//     //Zero means never sold. doesn't mean sold today
+//     if (daysSinceReceived < 60) {
+//       return 0
+//     } else if (daysSinceReceived >= 60 && daysSinceReceived <= 90) {
+//       return 1
+//     } else if (daysSinceReceived >= 91 && daysSinceReceived <= 120) {
+//       return 2
+//     } else if (daysSinceReceived >= 121 && daysSinceReceived <= 150) {
+//       return 3
+//     } else if (daysSinceReceived >= 151 && daysSinceReceived <= 180) {
+//       return 4
+//     } else if (daysSinceReceived >= 181 && productName.includes('CLEARANCE')) {
+//       return 5
+//     }
+//   }
 
-  if ((daysSinceReceived >= 60 && (daysSinceSold - daysSinceReceived) <= 60) || daysSinceReceived == 0) { //sold -rec <= 60 is recently restocked
-    if (daysSinceSold < 60) {
-      return 0
-    } else if (daysSinceSold >= 60 && daysSinceSold <= 90) {
-      return 1
-    } else if (daysSinceSold >= 91 && daysSinceSold <= 120) {
-      return 2
-    } else if (daysSinceSold >= 121 && daysSinceSold <= 150) {
-      return 3
-    } else if (daysSinceSold >= 151 && daysSinceSold <= 180) {
-      return 4
-    } else if (daysSinceSold >= 181) {
-      return 5
-    }
-  } else {
-    return 0
-  }
-}
+//   if ((daysSinceReceived >= 60 && (daysSinceSold - daysSinceReceived) <= 60) || daysSinceReceived == 0) { //sold -rec <= 60 is recently restocked
+//     if (daysSinceSold < 60) {
+//       return 0
+//     } else if (daysSinceSold >= 60 && daysSinceSold <= 90) {
+//       return 1
+//     } else if (daysSinceSold >= 91 && daysSinceSold <= 120) {
+//       return 2
+//     } else if (daysSinceSold >= 121 && daysSinceSold <= 150) {
+//       return 3
+//     } else if (daysSinceSold >= 151 && daysSinceSold <= 180) {
+//       return 4
+//     } else if (daysSinceSold >= 181) {
+//       return 5
+//     }
+//   } else {
+//     return 0
+//   }
+// }
 
 const downloadCSV = async (saleTier) => {
   await getProductsBySaleTier(saleTier, false, 10000, 0).then((data) => {
