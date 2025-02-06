@@ -43,31 +43,32 @@ export const getDiscountPercentage = async (saleTier, margin) => {
 }
 
 export const determineSaleTier = async (product) => {
-  const daysSinceSold = Number(product['Item Metrics Days Since Sold'])
-  const daysSinceReceived = Number(product['Item Metrics Days Since Received'])
+  const daysSinceSold = parseInt(product['Item Metrics Days Since Sold']) //NaN means never sold. Zero means mean sold today
+  const daysSinceReceived = parseInt(product['Item Metrics Days Since Received']) //NaN means never received. Zero means mean sold today
   const productName = product['Item Description']
   const quantity = Number(product['Item Metrics Quantity on Hand'])
 
-  if (quantity <= 0) {
+  if (quantity <= 0 || productName.includes("NOT FOR SALE")) {
     return 0
   }
 
   if (
-    (daysSinceSold == 0 && daysSinceReceived == 0) ||
+    (isNaN(daysSinceSold) && isNaN(daysSinceReceived)) ||
     product['Item Category'].includes('Single Cards') ||
+    product['Item Category'].includes('Manga') ||
     product['Item Avg Cost'] == 0
   ) {
     return -1 //must be determined manually
   }
 
-  // if (productName.includes('CLEARANCE')) {
-  //   return 5
-  // }
+  if (productName.includes('CLEARANCE')) {
+    return 5
+  }
 
-  if (daysSinceSold == 0 || daysSinceSold - daysSinceReceived > 60) {
-    //since sold - sincerec > 60 is old item restocked after long time. treat as new item
+  if (isNaN(daysSinceSold) || daysSinceSold - daysSinceReceived > 60) {
+    //since sold - sincerec > 60 is old item restocked after long time. treat as new 'never sold' item
     console.log(product['Item System ID'])
-    //Zero means never sold. doesn't mean sold today
+    //NaN means never sold. Zero means mean sold today
     if (daysSinceReceived < 60) {
       return 0
     } else if (daysSinceReceived >= 60 && daysSinceReceived <= 90) {
@@ -78,12 +79,12 @@ export const determineSaleTier = async (product) => {
       return 3
     } else if (daysSinceReceived >= 151 && daysSinceReceived <= 180) {
       return 4
-    } else if (daysSinceReceived >= 181 && productName.includes('CLEARANCE')) {
+    } else if (daysSinceReceived >= 181 /* && productName.includes('CLEARANCE') */) {
       return 5
     }
   }
 
-  if ((daysSinceReceived >= 60 && daysSinceSold - daysSinceReceived <= 60) || daysSinceReceived == 0) {
+  if ((daysSinceReceived >= 60 && daysSinceSold - daysSinceReceived <= 60) || isNaN(daysSinceReceived)) {
     //sold -rec <= 60 is recently restocked
     if (daysSinceSold < 60) {
       return 0
@@ -136,7 +137,7 @@ export const handleProductUpdate = async (productFromDB, product, saleTierFromCS
       (product[price] - product[cost]) / product[price]
     )
   
-    if (calculateSalePrice) {
+    if (saleTierFromCSV > 0) {
       salePrice = discountPercentage == 1 ? Number(product[price]) : Number(product[cost] / discountPercentage)
     } else {
       salePrice = Number(product[price])

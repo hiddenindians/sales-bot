@@ -1,6 +1,5 @@
 import client from './client.js'
-import { downloadBlob } from './utils.js'
-import { getDiscountPercentage } from './utils.js'
+import { downloadBlob, getDiscountPercentage, addWeeksToDate } from './utils.js'
 
 
 
@@ -117,46 +116,5 @@ export const patchProduct = async (id, body) => {
     await client.service('products').patch(id, body);
 }
 
-
-// export const patchProduct = async (
-//   id,
-//   product,
-//   saleTierFromCSV,
-//   calculateSalePrice,
-//   additionalFields = {}
-// ) => {
-//   const productName = 'Item Description'
-//   const cost = 'Item Avg Cost'
-//   const price = 'Item Metrics Price'
-//   const quantity = 'Item Metrics Quantity on Hand'
-//   const category = 'Item Category'
-//   var salePrice
-
-//   const discountPercentage = await getDiscountPercentage(
-//     saleTierFromCSV,
-//     (product[price] - product[cost]) / product[price]
-//   )
-
-//   if (calculateSalePrice) {
-//     salePrice = discountPercentage == 1 ? Number(product[price]) : Number(product[cost] / discountPercentage)
-//   } else {
-//     salePrice = Number(product[price])
-//   }
-
-//   const patchFields = {
-//     name: product[productName],
-//     category: product[category],
-//     regular_price: Number(product[price]),
-//     sale_price: salePrice,
-//     quantity: Number(product[quantity]),
-//     desired_margin: Number((1 - discountPercentage).toFixed(2)),
-//     ...additionalFields
-//   }
-
-//   // console.log('Patching product:', id)
-//   // console.log('Patch fields:', patchFields)
-
-//   await client.service('products').patch(id, patchFields)
-// }
 
 

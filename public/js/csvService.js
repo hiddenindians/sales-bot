@@ -1,7 +1,11 @@
-
-import { getProductByRetailId, getProductByEcomIds, getProductsByName } from './productService.js'
-
-import { downloadBlob, determineSaleTier, handleProductUpdate } from './utils.js'
+import client from './client.js';
+import { getProductByRetailId, getProductByEcomIds, getProductsByName, getAllEcomProducts, getProductsByDesiredMargin, getProductsBySaleTier } from './productService.js'
+import { downloadBlob, determineSaleTier, handleProductUpdate, getDiscountPercentage} from './utils.js'
+import {
+  BlobWriter,
+  BlobReader,
+  ZipWriter
+} from "https://deno.land/x/zipjs/index.js";
 
 
 export const importCSV = async (e) => {

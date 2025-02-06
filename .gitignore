@@ -119,3 +119,7 @@ dist
 .sqlite
 
 lib/
+sales-bot copy.sqlite
+*.sqlite
+*.sqlite
+sales-bot.sqlite
