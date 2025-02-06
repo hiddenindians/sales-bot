@@ -17,9 +17,13 @@ import {
 import type { Application } from '../../declarations'
 import { UserService, getOptions } from './users.class'
 import { userPath, userMethods } from './users.shared'
+import { preventMultipleUsers } from '../../hooks/prevent-multiple-users'
 
 export * from './users.class'
 export * from './users.schema'
+
+
+
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const user = (app: Application) => {
@@ -45,7 +49,7 @@ export const user = (app: Application) => {
       all: [schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],
+      create: [preventMultipleUsers, schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],
       patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
       remove: []
     },

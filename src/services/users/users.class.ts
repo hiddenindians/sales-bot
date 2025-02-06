@@ -17,12 +17,30 @@ export class UserService<ServiceParams extends Params = UserParams> extends Knex
   UserParams,
   UserPatch
 > {
+  // Implement single-user creation for individual records
+  async create(data: UserData, params?: ServiceParams): Promise<User>
+  // Implement single-user creation for bulk operations (arrays)
+  async create(data: UserData[], params?: ServiceParams): Promise<User[]>
+  // Implementation that handles both cases
+  async create(data: UserData | UserData[], params?: ServiceParams): Promise<User | User[]> {
+    // Reject bulk creation attempts
+    if (Array.isArray(data)) {
+      throw new Error('Bulk user creation is not allowed')
+    }
+    // Check for existing users
+    const existingUsers = await super.find({
+      query: {
+        $limit: 1
+      }
+    })
 
+    if (existingUsers.total > 0) {
+      throw new Error('Only one user account is allowed in the system')
+    }
 
-
-
-
-  
+    // Create the single user
+    return super.create(data, params)
+  }
 }
 
 export const getOptions = (app: Application): KnexAdapterOptions => {
