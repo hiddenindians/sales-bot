@@ -19,61 +19,103 @@
 </head>
 
 <body data-theme="synthwave">
-  <div class="container mx-auto">
-    <div class="mx-auto py-5 w-4/5">
-      <div class="flex flex-wrap">
-        <label class=" form-control w-full max-w-xs mb-5 mr-5">
-          <div class="label">
-            <span class="label-text">Upload Analytics File</span>
-          </div>
-          <input type="file" data-type="analytics" id="import-csv"
-            class="file-input file-input-bordered w-full max-w-xs" />
+  <div id="login-container" class="container mx-auto py-5">
+    <div class="mx-auto w-full max-w-xs">
+      <form id="login-form" class="form-control">
+        <label class="label">
+          <span class="label-text">Email</span>
         </label>
-        <label class=" form-control w-full max-w-xs pb-5">
-          <div class="label">
-            <span class="label-text">Upload eCom File</span>
-          </div>
-          <input type="file" data-type="ecom" id="import-csv" class="file-input file-input-bordered w-full max-w-xs" />
-        </label>
-        <label class=" form-control w-full max-w-xs pb-5">
-          <div class="label">
-            <span class="label-text">Upload Full Analytics (w/ Archived)</span>
-          </div>
-          <input type="file" data-type="archive" id="import-csv"
-            class="file-input file-input-bordered w-full max-w-xs" />
-          <div class="label">
-            <span class="label-text">Use this to remove 0 qty items</span>
-          </div>
-        </label>
+        <input type="email" id="email" class="input input-bordered" required />
 
-        <button id="update-prices" class="btn m-1">Update Prices</button>
+        <label class="label">
+          <span class="label-text">Password</span>
+        </label>
+        <input type="password" id="password" class="input input-bordered" required />
+
+        <button type="submit" class="btn btn-primary mt-4">Login</button>
+      </form>
+      <div class="text-center mt-4">
+        <p>Need have an account? <a href="#" class="text-blue-500" id="toggle-form">Register</a></p>
       </div>
-      <span class="divider"></span>
-
-
-      <div class="pb-1 flex flex-wrap items-end ">
-        <label class="form-control w-full max-w-xs m-1">
-          <div class="label">
-            <span class="label-text">Select Sale Tier</span>
-          </div>
-          <select id="tier-select" class="select select-bordered">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">CLEARANCE</option>
-            <option value="-1">Undetermined</option>
-          </select>
+    </div>
+  </div>
+  <div id="register-container" class="container mx-auto py-5">
+    <div class="mx-auto w-full max-w-xs">
+      <form id="register-form" class="form-control">
+        <h2 class="text-xl mb-4">Create Account</h2>
+        <label class="label">
+          <span class="label-text">Email</span>
         </label>
-      
+        <input type="email" id="register-email" class="input input-bordered" required />
+        <label class="label">
+          <span class="label-text">Password</span>
+        </label>
+        <input type="password" id="register-password" class="input input-bordered" required />
+        <button type="submit" class="btn btn-primary mt-4">Register</button>
+      </form>
+      <!-- Add a link to switch between login and register -->
+      <div class="text-center mt-4">
+        <p>Already have an account? <a href="#" class="text-blue-500" id="toggle-form">Login</a></p>
+      </div>
+    </div>
+  </div>
+  <div id="main-container" class="hidden">
+    <div class="container mx-auto">
+      <div class="mx-auto py-5 w-4/5">
+        <div class="flex flex-wrap">
+          <label class=" form-control w-full max-w-xs mb-5 mr-5">
+            <div class="label">
+              <span class="label-text">Upload Analytics File</span>
+            </div>
+            <input type="file" data-type="analytics" id="import-csv"
+              class="file-input file-input-bordered w-full max-w-xs" />
+          </label>
+          <label class=" form-control w-full max-w-xs pb-5">
+            <div class="label">
+              <span class="label-text">Upload eCom File</span>
+            </div>
+            <input type="file" data-type="ecom" id="import-csv"
+              class="file-input file-input-bordered w-full max-w-xs" />
+          </label>
+          <label class=" form-control w-full max-w-xs pb-5">
+            <div class="label">
+              <span class="label-text">Upload Full Analytics (w/ Archived)</span>
+            </div>
+            <input type="file" data-type="archive" id="import-csv"
+              class="file-input file-input-bordered w-full max-w-xs" />
+            <div class="label">
+              <span class="label-text">Use this to remove 0 qty items</span>
+            </div>
+          </label>
 
-        <button class="btn  m-1 " id="sale-download">Download Sale CSV</button>
-        <button class="btn  m-1 " id="tier-download">Download Tier Lists</button>
+          <button id="update-prices" class="btn m-1">Update Prices</button>
+        </div>
+        <span class="divider"></span>
 
-        <button class="btn  m-1 " id="ecom-download">eCom Sale CSV</button>
-        <button class="btn  m-1 " id="new-clearance-download">New Clearance Items CSV</button>
 
-        <!-- <button class="btn btn-sm join-item" id="tier-2-download">Tier 2 Download</button>
+        <div class="pb-1 flex flex-wrap items-end ">
+          <label class="form-control w-full max-w-xs m-1">
+            <div class="label">
+              <span class="label-text">Select Sale Tier</span>
+            </div>
+            <select id="tier-select" class="select select-bordered">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">CLEARANCE</option>
+              <option value="-1">Undetermined</option>
+            </select>
+          </label>
+
+
+          <button class="btn  m-1 " id="sale-download">Download Sale CSV</button>
+          <button class="btn  m-1 " id="tier-download">Download Tier Lists</button>
+
+          <button class="btn  m-1 " id="ecom-download">eCom Sale CSV</button>
+          <button class="btn  m-1 " id="new-clearance-download">New Clearance Items CSV</button>
+
+          <!-- <button class="btn btn-sm join-item" id="tier-2-download">Tier 2 Download</button>
         <button class="btn btn-sm join-item" id="tier-3-download">Tier 3 Download</button>
 
         <button class="btn btn-sm join-item" id="tier-4-download">Tier 4 Download</button>
@@ -81,23 +123,25 @@
         <button class="btn btn-sm join-item" id="unable-to-determine">Needs a Human to Decide</button> -->
 
 
-        <button class="btn m-1" id="create-labels">Print Labels</button>
-        <button class="btn m-1" id="remove-labels">Download Label Removal File</button>
+          <button class="btn m-1" id="create-labels">Print Labels</button>
+          <button class="btn m-1" id="remove-labels">Download Label Removal File</button>
+        </div>
+
+
+
+
       </div>
 
 
+      <span class="divider"></span>
+      <div id="app">
 
-
-    </div>
-
-
-    <span class="divider"></span>
-    <div id="app">
-
+      </div>
     </div>
   </div>
 
   <script src="js/main.js" type="module"></script>
+
 
 </body>
 
